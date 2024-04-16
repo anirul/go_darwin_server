@@ -1,4 +1,4 @@
-module github.com/anirul/go_grpc
+module github.com/anirul/go_darwin_server
 
 go 1.22.2
 
