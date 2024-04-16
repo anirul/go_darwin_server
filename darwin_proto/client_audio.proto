@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package proto;
 
+option go_package = "github.com/anirul/go_darwin_server/darwin_proto";
+
 enum AudioMusicEnum {
     AUDIO_MUSIC_NONE = 0;       // No audio state (this is an error).
     AUDIO_MUSIC_TITLE = 1;      // Title audio.

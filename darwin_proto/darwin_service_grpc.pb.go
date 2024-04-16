@@ -4,7 +4,7 @@
 // - protoc             v5.26.1
 // source: darwin_service.proto
 
-package darwin
+package darwin_proto
 
 import (
 	context "context"
@@ -19,16 +19,24 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	DarwinService_Update_FullMethodName = "/darwin.DarwinService/Update"
-	DarwinService_Push_FullMethodName   = "/darwin.DarwinService/Push"
+	DarwinService_Update_FullMethodName          = "/proto.DarwinService/Update"
+	DarwinService_ReportInGame_FullMethodName    = "/proto.DarwinService/ReportInGame"
+	DarwinService_CreateCharacter_FullMethodName = "/proto.DarwinService/CreateCharacter"
+	DarwinService_Ping_FullMethodName            = "/proto.DarwinService/Ping"
 )
 
 // DarwinServiceClient is the client API for DarwinService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DarwinServiceClient interface {
+	// Update the position of object in the world to the clients.
 	Update(ctx context.Context, in *UpdateRequest, opts ...grpc.CallOption) (DarwinService_UpdateClient, error)
-	Push(ctx context.Context, in *PushRequest, opts ...grpc.CallOption) (*PushResponse, error)
+	// Client report the change of position and speed of a player.
+	ReportInGame(ctx context.Context, in *ReportInGameRequest, opts ...grpc.CallOption) (*ReportInGameResponse, error)
+	// Create a new character.
+	CreateCharacter(ctx context.Context, in *CreateCharacterRequest, opts ...grpc.CallOption) (*CreateCharacterResponse, error)
+	// Ping the server.
+	Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error)
 }
 
 type darwinServiceClient struct {
@@ -71,9 +79,27 @@ func (x *darwinServiceUpdateClient) Recv() (*UpdateResponse, error) {
 	return m, nil
 }
 
-func (c *darwinServiceClient) Push(ctx context.Context, in *PushRequest, opts ...grpc.CallOption) (*PushResponse, error) {
-	out := new(PushResponse)
-	err := c.cc.Invoke(ctx, DarwinService_Push_FullMethodName, in, out, opts...)
+func (c *darwinServiceClient) ReportInGame(ctx context.Context, in *ReportInGameRequest, opts ...grpc.CallOption) (*ReportInGameResponse, error) {
+	out := new(ReportInGameResponse)
+	err := c.cc.Invoke(ctx, DarwinService_ReportInGame_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *darwinServiceClient) CreateCharacter(ctx context.Context, in *CreateCharacterRequest, opts ...grpc.CallOption) (*CreateCharacterResponse, error) {
+	out := new(CreateCharacterResponse)
+	err := c.cc.Invoke(ctx, DarwinService_CreateCharacter_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *darwinServiceClient) Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error) {
+	out := new(PingResponse)
+	err := c.cc.Invoke(ctx, DarwinService_Ping_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -84,8 +110,14 @@ func (c *darwinServiceClient) Push(ctx context.Context, in *PushRequest, opts ..
 // All implementations must embed UnimplementedDarwinServiceServer
 // for forward compatibility
 type DarwinServiceServer interface {
+	// Update the position of object in the world to the clients.
 	Update(*UpdateRequest, DarwinService_UpdateServer) error
-	Push(context.Context, *PushRequest) (*PushResponse, error)
+	// Client report the change of position and speed of a player.
+	ReportInGame(context.Context, *ReportInGameRequest) (*ReportInGameResponse, error)
+	// Create a new character.
+	CreateCharacter(context.Context, *CreateCharacterRequest) (*CreateCharacterResponse, error)
+	// Ping the server.
+	Ping(context.Context, *PingRequest) (*PingResponse, error)
 	mustEmbedUnimplementedDarwinServiceServer()
 }
 
@@ -96,8 +128,14 @@ type UnimplementedDarwinServiceServer struct {
 func (UnimplementedDarwinServiceServer) Update(*UpdateRequest, DarwinService_UpdateServer) error {
 	return status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
-func (UnimplementedDarwinServiceServer) Push(context.Context, *PushRequest) (*PushResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Push not implemented")
+func (UnimplementedDarwinServiceServer) ReportInGame(context.Context, *ReportInGameRequest) (*ReportInGameResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ReportInGame not implemented")
+}
+func (UnimplementedDarwinServiceServer) CreateCharacter(context.Context, *CreateCharacterRequest) (*CreateCharacterResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateCharacter not implemented")
+}
+func (UnimplementedDarwinServiceServer) Ping(context.Context, *PingRequest) (*PingResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Ping not implemented")
 }
 func (UnimplementedDarwinServiceServer) mustEmbedUnimplementedDarwinServiceServer() {}
 
@@ -133,20 +171,56 @@ func (x *darwinServiceUpdateServer) Send(m *UpdateResponse) error {
 	return x.ServerStream.SendMsg(m)
 }
 
-func _DarwinService_Push_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PushRequest)
+func _DarwinService_ReportInGame_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ReportInGameRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(DarwinServiceServer).Push(ctx, in)
+		return srv.(DarwinServiceServer).ReportInGame(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: DarwinService_Push_FullMethodName,
+		FullMethod: DarwinService_ReportInGame_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DarwinServiceServer).Push(ctx, req.(*PushRequest))
+		return srv.(DarwinServiceServer).ReportInGame(ctx, req.(*ReportInGameRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DarwinService_CreateCharacter_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateCharacterRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DarwinServiceServer).CreateCharacter(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DarwinService_CreateCharacter_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DarwinServiceServer).CreateCharacter(ctx, req.(*CreateCharacterRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DarwinService_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PingRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DarwinServiceServer).Ping(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DarwinService_Ping_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DarwinServiceServer).Ping(ctx, req.(*PingRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -155,12 +229,20 @@ func _DarwinService_Push_Handler(srv interface{}, ctx context.Context, dec func(
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var DarwinService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "darwin.DarwinService",
+	ServiceName: "proto.DarwinService",
 	HandlerType: (*DarwinServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Push",
-			Handler:    _DarwinService_Push_Handler,
+			MethodName: "ReportInGame",
+			Handler:    _DarwinService_ReportInGame_Handler,
+		},
+		{
+			MethodName: "CreateCharacter",
+			Handler:    _DarwinService_CreateCharacter_Handler,
+		},
+		{
+			MethodName: "Ping",
+			Handler:    _DarwinService_Ping_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package proto;
 
+option go_package = "github.com/anirul/go_darwin_server/darwin_proto";
+
 import "vector_math.proto";
 
 enum TextSizeEnum {

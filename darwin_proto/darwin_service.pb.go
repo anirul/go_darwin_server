@@ -4,7 +4,7 @@
 // 	protoc        v5.26.1
 // source: darwin_service.proto
 
-package darwin
+package darwin_proto
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -20,461 +20,6 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// What type of element is it?
-type Element_TypeEnum int32
-
-const (
-	Element_UKNOWN    Element_TypeEnum = 0 // Unknown this is an error!
-	Element_GROUND    Element_TypeEnum = 1 // From where the gravity is generated.
-	Element_EXPLOSION Element_TypeEnum = 2 // Explosion that push stuff around.
-	Element_UPGRADE   Element_TypeEnum = 3 // Upgrade to upgrade players.
-	Element_GREEN     Element_TypeEnum = 4 // Greenery (no effect on anything).
-	Element_BROWN     Element_TypeEnum = 5 // Tree bark and non destructible elements.
-	Element_WATER     Element_TypeEnum = 6 // Water.
-)
-
-// Enum value maps for Element_TypeEnum.
-var (
-	Element_TypeEnum_name = map[int32]string{
-		0: "UKNOWN",
-		1: "GROUND",
-		2: "EXPLOSION",
-		3: "UPGRADE",
-		4: "GREEN",
-		5: "BROWN",
-		6: "WATER",
-	}
-	Element_TypeEnum_value = map[string]int32{
-		"UKNOWN":    0,
-		"GROUND":    1,
-		"EXPLOSION": 2,
-		"UPGRADE":   3,
-		"GREEN":     4,
-		"BROWN":     5,
-		"WATER":     6,
-	}
-)
-
-func (x Element_TypeEnum) Enum() *Element_TypeEnum {
-	p := new(Element_TypeEnum)
-	*p = x
-	return p
-}
-
-func (x Element_TypeEnum) String() string {
-	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
-}
-
-func (Element_TypeEnum) Descriptor() protoreflect.EnumDescriptor {
-	return file_darwin_service_proto_enumTypes[0].Descriptor()
-}
-
-func (Element_TypeEnum) Type() protoreflect.EnumType {
-	return &file_darwin_service_proto_enumTypes[0]
-}
-
-func (x Element_TypeEnum) Number() protoreflect.EnumNumber {
-	return protoreflect.EnumNumber(x)
-}
-
-// Deprecated: Use Element_TypeEnum.Descriptor instead.
-func (Element_TypeEnum) EnumDescriptor() ([]byte, []int) {
-	return file_darwin_service_proto_rawDescGZIP(), []int{3, 0}
-}
-
-// Vector 3 this store position or other 3 float values.
-// Next: 4
-type Vector3 struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	X float64 `protobuf:"fixed64,1,opt,name=x,proto3" json:"x,omitempty"`
-	Y float64 `protobuf:"fixed64,2,opt,name=y,proto3" json:"y,omitempty"`
-	Z float64 `protobuf:"fixed64,3,opt,name=z,proto3" json:"z,omitempty"`
-}
-
-func (x *Vector3) Reset() {
-	*x = Vector3{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_darwin_service_proto_msgTypes[0]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *Vector3) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Vector3) ProtoMessage() {}
-
-func (x *Vector3) ProtoReflect() protoreflect.Message {
-	mi := &file_darwin_service_proto_msgTypes[0]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Vector3.ProtoReflect.Descriptor instead.
-func (*Vector3) Descriptor() ([]byte, []int) {
-	return file_darwin_service_proto_rawDescGZIP(), []int{0}
-}
-
-func (x *Vector3) GetX() float64 {
-	if x != nil {
-		return x.X
-	}
-	return 0
-}
-
-func (x *Vector3) GetY() float64 {
-	if x != nil {
-		return x.Y
-	}
-	return 0
-}
-
-func (x *Vector3) GetZ() float64 {
-	if x != nil {
-		return x.Z
-	}
-	return 0
-}
-
-// Vector 4 this is representing a quaternion (rotation).
-type Vector4 struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	X float64 `protobuf:"fixed64,1,opt,name=x,proto3" json:"x,omitempty"`
-	Y float64 `protobuf:"fixed64,2,opt,name=y,proto3" json:"y,omitempty"`
-	Z float64 `protobuf:"fixed64,3,opt,name=z,proto3" json:"z,omitempty"`
-	W float64 `protobuf:"fixed64,4,opt,name=w,proto3" json:"w,omitempty"`
-}
-
-func (x *Vector4) Reset() {
-	*x = Vector4{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_darwin_service_proto_msgTypes[1]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *Vector4) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Vector4) ProtoMessage() {}
-
-func (x *Vector4) ProtoReflect() protoreflect.Message {
-	mi := &file_darwin_service_proto_msgTypes[1]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Vector4.ProtoReflect.Descriptor instead.
-func (*Vector4) Descriptor() ([]byte, []int) {
-	return file_darwin_service_proto_rawDescGZIP(), []int{1}
-}
-
-func (x *Vector4) GetX() float64 {
-	if x != nil {
-		return x.X
-	}
-	return 0
-}
-
-func (x *Vector4) GetY() float64 {
-	if x != nil {
-		return x.Y
-	}
-	return 0
-}
-
-func (x *Vector4) GetZ() float64 {
-	if x != nil {
-		return x.Z
-	}
-	return 0
-}
-
-func (x *Vector4) GetW() float64 {
-	if x != nil {
-		return x.W
-	}
-	return 0
-}
-
-// Physical property of the element.
-// Next: 7
-type Physic struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	// Sphere radius.
-	Radius float64 `protobuf:"fixed64,1,opt,name=radius,proto3" json:"radius,omitempty"`
-	// weight total.
-	Mass float64 `protobuf:"fixed64,2,opt,name=mass,proto3" json:"mass,omitempty"`
-	// Sphere position.
-	Position *Vector3 `protobuf:"bytes,3,opt,name=position,proto3" json:"position,omitempty"`
-	// Velocity the speed it has d(position)/dt.
-	Velocity *Vector3 `protobuf:"bytes,5,opt,name=velocity,proto3" json:"velocity,omitempty"`
-	// Sphere look direction.
-	Orientation *Vector4 `protobuf:"bytes,4,opt,name=orientation,proto3" json:"orientation,omitempty"`
-	// Rotation d(orientation)/dt.
-	Rotation *Vector4 `protobuf:"bytes,6,opt,name=rotation,proto3" json:"rotation,omitempty"`
-}
-
-func (x *Physic) Reset() {
-	*x = Physic{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_darwin_service_proto_msgTypes[2]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *Physic) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Physic) ProtoMessage() {}
-
-func (x *Physic) ProtoReflect() protoreflect.Message {
-	mi := &file_darwin_service_proto_msgTypes[2]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Physic.ProtoReflect.Descriptor instead.
-func (*Physic) Descriptor() ([]byte, []int) {
-	return file_darwin_service_proto_rawDescGZIP(), []int{2}
-}
-
-func (x *Physic) GetRadius() float64 {
-	if x != nil {
-		return x.Radius
-	}
-	return 0
-}
-
-func (x *Physic) GetMass() float64 {
-	if x != nil {
-		return x.Mass
-	}
-	return 0
-}
-
-func (x *Physic) GetPosition() *Vector3 {
-	if x != nil {
-		return x.Position
-	}
-	return nil
-}
-
-func (x *Physic) GetVelocity() *Vector3 {
-	if x != nil {
-		return x.Velocity
-	}
-	return nil
-}
-
-func (x *Physic) GetOrientation() *Vector4 {
-	if x != nil {
-		return x.Orientation
-	}
-	return nil
-}
-
-func (x *Physic) GetRotation() *Vector4 {
-	if x != nil {
-		return x.Rotation
-	}
-	return nil
-}
-
-// Sphere element in the world.
-// Next: 5
-type Element struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	// Material string.
-	Material string `protobuf:"bytes,2,opt,name=material,proto3" json:"material,omitempty"`
-	// Physic, position, speed etc...
-	Physic   *Physic          `protobuf:"bytes,3,opt,name=physic,proto3" json:"physic,omitempty"`
-	TypeEnum Element_TypeEnum `protobuf:"varint,4,opt,name=type_enum,json=typeEnum,proto3,enum=darwin.Element_TypeEnum" json:"type_enum,omitempty"`
-}
-
-func (x *Element) Reset() {
-	*x = Element{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_darwin_service_proto_msgTypes[3]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *Element) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Element) ProtoMessage() {}
-
-func (x *Element) ProtoReflect() protoreflect.Message {
-	mi := &file_darwin_service_proto_msgTypes[3]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Element.ProtoReflect.Descriptor instead.
-func (*Element) Descriptor() ([]byte, []int) {
-	return file_darwin_service_proto_rawDescGZIP(), []int{3}
-}
-
-func (x *Element) GetName() string {
-	if x != nil {
-		return x.Name
-	}
-	return ""
-}
-
-func (x *Element) GetMaterial() string {
-	if x != nil {
-		return x.Material
-	}
-	return ""
-}
-
-func (x *Element) GetPhysic() *Physic {
-	if x != nil {
-		return x.Physic
-	}
-	return nil
-}
-
-func (x *Element) GetTypeEnum() Element_TypeEnum {
-	if x != nil {
-		return x.TypeEnum
-	}
-	return Element_UKNOWN
-}
-
-// Player it will be represented by a sphere on server.
-// Next: 4
-type Player struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	// Player name.
-	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	// Material string.
-	Material string `protobuf:"bytes,2,opt,name=material,proto3" json:"material,omitempty"`
-	// Physic paramters.
-	Physic *Physic `protobuf:"bytes,3,opt,name=physic,proto3" json:"physic,omitempty"`
-	// Local g axis (used for local camera angle).
-	GNormal *Vector3 `protobuf:"bytes,4,opt,name=g_normal,json=gNormal,proto3" json:"g_normal,omitempty"`
-	// G force (used for local computation).
-	GForce float64 `protobuf:"fixed64,5,opt,name=g_force,json=gForce,proto3" json:"g_force,omitempty"`
-}
-
-func (x *Player) Reset() {
-	*x = Player{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_darwin_service_proto_msgTypes[4]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *Player) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Player) ProtoMessage() {}
-
-func (x *Player) ProtoReflect() protoreflect.Message {
-	mi := &file_darwin_service_proto_msgTypes[4]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Player.ProtoReflect.Descriptor instead.
-func (*Player) Descriptor() ([]byte, []int) {
-	return file_darwin_service_proto_rawDescGZIP(), []int{4}
-}
-
-func (x *Player) GetName() string {
-	if x != nil {
-		return x.Name
-	}
-	return ""
-}
-
-func (x *Player) GetMaterial() string {
-	if x != nil {
-		return x.Material
-	}
-	return ""
-}
-
-func (x *Player) GetPhysic() *Physic {
-	if x != nil {
-		return x.Physic
-	}
-	return nil
-}
-
-func (x *Player) GetGNormal() *Vector3 {
-	if x != nil {
-		return x.GNormal
-	}
-	return nil
-}
-
-func (x *Player) GetGForce() float64 {
-	if x != nil {
-		return x.GForce
-	}
-	return 0
-}
-
 // UpdateRequest
 // Next: 2
 type UpdateRequest struct {
@@ -489,7 +34,7 @@ type UpdateRequest struct {
 func (x *UpdateRequest) Reset() {
 	*x = UpdateRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_darwin_service_proto_msgTypes[5]
+		mi := &file_darwin_service_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -502,7 +47,7 @@ func (x *UpdateRequest) String() string {
 func (*UpdateRequest) ProtoMessage() {}
 
 func (x *UpdateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_darwin_service_proto_msgTypes[5]
+	mi := &file_darwin_service_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -515,7 +60,7 @@ func (x *UpdateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateRequest.ProtoReflect.Descriptor instead.
 func (*UpdateRequest) Descriptor() ([]byte, []int) {
-	return file_darwin_service_proto_rawDescGZIP(), []int{5}
+	return file_darwin_service_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *UpdateRequest) GetName() string {
@@ -526,14 +71,14 @@ func (x *UpdateRequest) GetName() string {
 }
 
 // UpdateResponse
-// Next: 5
+// Next: 4
 type UpdateResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// Player list and position.
-	Players []*Player `protobuf:"bytes,1,rep,name=players,proto3" json:"players,omitempty"`
+	// Character list and position.
+	Characters []*Character `protobuf:"bytes,1,rep,name=characters,proto3" json:"characters,omitempty"`
 	// Elements list and position.
 	Elements []*Element `protobuf:"bytes,2,rep,name=elements,proto3" json:"elements,omitempty"`
 	// Present time on the server.
@@ -543,7 +88,7 @@ type UpdateResponse struct {
 func (x *UpdateResponse) Reset() {
 	*x = UpdateResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_darwin_service_proto_msgTypes[6]
+		mi := &file_darwin_service_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -556,7 +101,7 @@ func (x *UpdateResponse) String() string {
 func (*UpdateResponse) ProtoMessage() {}
 
 func (x *UpdateResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_darwin_service_proto_msgTypes[6]
+	mi := &file_darwin_service_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -569,12 +114,12 @@ func (x *UpdateResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateResponse.ProtoReflect.Descriptor instead.
 func (*UpdateResponse) Descriptor() ([]byte, []int) {
-	return file_darwin_service_proto_rawDescGZIP(), []int{6}
+	return file_darwin_service_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *UpdateResponse) GetPlayers() []*Player {
+func (x *UpdateResponse) GetCharacters() []*Character {
 	if x != nil {
-		return x.Players
+		return x.Characters
 	}
 	return nil
 }
@@ -593,21 +138,308 @@ func (x *UpdateResponse) GetTime() float64 {
 	return 0
 }
 
-// PushRequest
-// Next: 3
-type PushRequest struct {
+// ReportInGameRequest
+// Next: 6
+type ReportInGameRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// Player name.
+	// Character name.
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	// New physic.
 	Physic *Physic `protobuf:"bytes,2,opt,name=physic,proto3" json:"physic,omitempty"`
+	// Name of potential hit.
+	PotentialHit string `protobuf:"bytes,3,opt,name=potential_hit,json=potentialHit,proto3" json:"potential_hit,omitempty"`
+	// Character status.
+	StatusEnum StatusEnum `protobuf:"varint,4,opt,name=status_enum,json=statusEnum,proto3,enum=proto.StatusEnum" json:"status_enum,omitempty"`
+	// Character special effect.
+	SpecialEffectBoost *SpecialEffectParameter `protobuf:"bytes,5,opt,name=special_effect_boost,json=specialEffectBoost,proto3" json:"special_effect_boost,omitempty"`
 }
 
-func (x *PushRequest) Reset() {
-	*x = PushRequest{}
+func (x *ReportInGameRequest) Reset() {
+	*x = ReportInGameRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_darwin_service_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ReportInGameRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ReportInGameRequest) ProtoMessage() {}
+
+func (x *ReportInGameRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_darwin_service_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ReportInGameRequest.ProtoReflect.Descriptor instead.
+func (*ReportInGameRequest) Descriptor() ([]byte, []int) {
+	return file_darwin_service_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *ReportInGameRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *ReportInGameRequest) GetPhysic() *Physic {
+	if x != nil {
+		return x.Physic
+	}
+	return nil
+}
+
+func (x *ReportInGameRequest) GetPotentialHit() string {
+	if x != nil {
+		return x.PotentialHit
+	}
+	return ""
+}
+
+func (x *ReportInGameRequest) GetStatusEnum() StatusEnum {
+	if x != nil {
+		return x.StatusEnum
+	}
+	return StatusEnum_STATUS_UNKNOWN
+}
+
+func (x *ReportInGameRequest) GetSpecialEffectBoost() *SpecialEffectParameter {
+	if x != nil {
+		return x.SpecialEffectBoost
+	}
+	return nil
+}
+
+// ReportInGameResponse
+// Next: 1
+type ReportInGameResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *ReportInGameResponse) Reset() {
+	*x = ReportInGameResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_darwin_service_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ReportInGameResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ReportInGameResponse) ProtoMessage() {}
+
+func (x *ReportInGameResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_darwin_service_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ReportInGameResponse.ProtoReflect.Descriptor instead.
+func (*ReportInGameResponse) Descriptor() ([]byte, []int) {
+	return file_darwin_service_proto_rawDescGZIP(), []int{3}
+}
+
+// CreateCharacterRequest
+// Next: 3
+type CreateCharacterRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// Character name.
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// Character color.
+	Color *Vector3 `protobuf:"bytes,2,opt,name=color,proto3" json:"color,omitempty"`
+}
+
+func (x *CreateCharacterRequest) Reset() {
+	*x = CreateCharacterRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_darwin_service_proto_msgTypes[4]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CreateCharacterRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateCharacterRequest) ProtoMessage() {}
+
+func (x *CreateCharacterRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_darwin_service_proto_msgTypes[4]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateCharacterRequest.ProtoReflect.Descriptor instead.
+func (*CreateCharacterRequest) Descriptor() ([]byte, []int) {
+	return file_darwin_service_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *CreateCharacterRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *CreateCharacterRequest) GetColor() *Vector3 {
+	if x != nil {
+		return x.Color
+	}
+	return nil
+}
+
+// CreateCharacterResponse
+// Next: 2
+type CreateCharacterResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// Return enum.
+	ReturnEnum ReturnEnum `protobuf:"varint,1,opt,name=return_enum,json=returnEnum,proto3,enum=proto.ReturnEnum" json:"return_enum,omitempty"`
+}
+
+func (x *CreateCharacterResponse) Reset() {
+	*x = CreateCharacterResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_darwin_service_proto_msgTypes[5]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CreateCharacterResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateCharacterResponse) ProtoMessage() {}
+
+func (x *CreateCharacterResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_darwin_service_proto_msgTypes[5]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateCharacterResponse.ProtoReflect.Descriptor instead.
+func (*CreateCharacterResponse) Descriptor() ([]byte, []int) {
+	return file_darwin_service_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *CreateCharacterResponse) GetReturnEnum() ReturnEnum {
+	if x != nil {
+		return x.ReturnEnum
+	}
+	return ReturnEnum_RETURN_ERROR
+}
+
+// PingRequest
+// Next: 2
+type PingRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// Value to check.
+	Value int32 `protobuf:"varint,1,opt,name=value,proto3" json:"value,omitempty"`
+}
+
+func (x *PingRequest) Reset() {
+	*x = PingRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_darwin_service_proto_msgTypes[6]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *PingRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PingRequest) ProtoMessage() {}
+
+func (x *PingRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_darwin_service_proto_msgTypes[6]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PingRequest.ProtoReflect.Descriptor instead.
+func (*PingRequest) Descriptor() ([]byte, []int) {
+	return file_darwin_service_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *PingRequest) GetValue() int32 {
+	if x != nil {
+		return x.Value
+	}
+	return 0
+}
+
+// PingResponse
+// Next: 4
+type PingResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// Returned value.
+	Value int32 `protobuf:"varint,1,opt,name=value,proto3" json:"value,omitempty"`
+	// Present time on the server.
+	Time float64 `protobuf:"fixed64,2,opt,name=time,proto3" json:"time,omitempty"`
+	// Player parameter (used to set parameters).
+	PlayerParameter *PlayerParameter `protobuf:"bytes,3,opt,name=player_parameter,json=playerParameter,proto3" json:"player_parameter,omitempty"`
+}
+
+func (x *PingResponse) Reset() {
+	*x = PingResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_darwin_service_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -615,13 +447,13 @@ func (x *PushRequest) Reset() {
 	}
 }
 
-func (x *PushRequest) String() string {
+func (x *PingResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*PushRequest) ProtoMessage() {}
+func (*PingResponse) ProtoMessage() {}
 
-func (x *PushRequest) ProtoReflect() protoreflect.Message {
+func (x *PingResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_darwin_service_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -633,146 +465,109 @@ func (x *PushRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use PushRequest.ProtoReflect.Descriptor instead.
-func (*PushRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use PingResponse.ProtoReflect.Descriptor instead.
+func (*PingResponse) Descriptor() ([]byte, []int) {
 	return file_darwin_service_proto_rawDescGZIP(), []int{7}
 }
 
-func (x *PushRequest) GetName() string {
+func (x *PingResponse) GetValue() int32 {
 	if x != nil {
-		return x.Name
+		return x.Value
 	}
-	return ""
+	return 0
 }
 
-func (x *PushRequest) GetPhysic() *Physic {
+func (x *PingResponse) GetTime() float64 {
 	if x != nil {
-		return x.Physic
+		return x.Time
+	}
+	return 0
+}
+
+func (x *PingResponse) GetPlayerParameter() *PlayerParameter {
+	if x != nil {
+		return x.PlayerParameter
 	}
 	return nil
-}
-
-// PushResponse
-// Next: 1
-type PushResponse struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *PushResponse) Reset() {
-	*x = PushResponse{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_darwin_service_proto_msgTypes[8]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *PushResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*PushResponse) ProtoMessage() {}
-
-func (x *PushResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_darwin_service_proto_msgTypes[8]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use PushResponse.ProtoReflect.Descriptor instead.
-func (*PushResponse) Descriptor() ([]byte, []int) {
-	return file_darwin_service_proto_rawDescGZIP(), []int{8}
 }
 
 var File_darwin_service_proto protoreflect.FileDescriptor
 
 var file_darwin_service_proto_rawDesc = []byte{
 	0x0a, 0x14, 0x64, 0x61, 0x72, 0x77, 0x69, 0x6e, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
-	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x06, 0x64, 0x61, 0x72, 0x77, 0x69, 0x6e, 0x22, 0x33,
-	0x0a, 0x07, 0x56, 0x65, 0x63, 0x74, 0x6f, 0x72, 0x33, 0x12, 0x0c, 0x0a, 0x01, 0x78, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x01, 0x52, 0x01, 0x78, 0x12, 0x0c, 0x0a, 0x01, 0x79, 0x18, 0x02, 0x20, 0x01,
-	0x28, 0x01, 0x52, 0x01, 0x79, 0x12, 0x0c, 0x0a, 0x01, 0x7a, 0x18, 0x03, 0x20, 0x01, 0x28, 0x01,
-	0x52, 0x01, 0x7a, 0x22, 0x41, 0x0a, 0x07, 0x56, 0x65, 0x63, 0x74, 0x6f, 0x72, 0x34, 0x12, 0x0c,
-	0x0a, 0x01, 0x78, 0x18, 0x01, 0x20, 0x01, 0x28, 0x01, 0x52, 0x01, 0x78, 0x12, 0x0c, 0x0a, 0x01,
-	0x79, 0x18, 0x02, 0x20, 0x01, 0x28, 0x01, 0x52, 0x01, 0x79, 0x12, 0x0c, 0x0a, 0x01, 0x7a, 0x18,
-	0x03, 0x20, 0x01, 0x28, 0x01, 0x52, 0x01, 0x7a, 0x12, 0x0c, 0x0a, 0x01, 0x77, 0x18, 0x04, 0x20,
-	0x01, 0x28, 0x01, 0x52, 0x01, 0x77, 0x22, 0xee, 0x01, 0x0a, 0x06, 0x50, 0x68, 0x79, 0x73, 0x69,
-	0x63, 0x12, 0x16, 0x0a, 0x06, 0x72, 0x61, 0x64, 0x69, 0x75, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28,
-	0x01, 0x52, 0x06, 0x72, 0x61, 0x64, 0x69, 0x75, 0x73, 0x12, 0x12, 0x0a, 0x04, 0x6d, 0x61, 0x73,
-	0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x01, 0x52, 0x04, 0x6d, 0x61, 0x73, 0x73, 0x12, 0x2b, 0x0a,
-	0x08, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32,
-	0x0f, 0x2e, 0x64, 0x61, 0x72, 0x77, 0x69, 0x6e, 0x2e, 0x56, 0x65, 0x63, 0x74, 0x6f, 0x72, 0x33,
-	0x52, 0x08, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x2b, 0x0a, 0x08, 0x76, 0x65,
-	0x6c, 0x6f, 0x63, 0x69, 0x74, 0x79, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0f, 0x2e, 0x64,
-	0x61, 0x72, 0x77, 0x69, 0x6e, 0x2e, 0x56, 0x65, 0x63, 0x74, 0x6f, 0x72, 0x33, 0x52, 0x08, 0x76,
-	0x65, 0x6c, 0x6f, 0x63, 0x69, 0x74, 0x79, 0x12, 0x31, 0x0a, 0x0b, 0x6f, 0x72, 0x69, 0x65, 0x6e,
-	0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0f, 0x2e, 0x64,
-	0x61, 0x72, 0x77, 0x69, 0x6e, 0x2e, 0x56, 0x65, 0x63, 0x74, 0x6f, 0x72, 0x34, 0x52, 0x0b, 0x6f,
-	0x72, 0x69, 0x65, 0x6e, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x2b, 0x0a, 0x08, 0x72, 0x6f,
-	0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0f, 0x2e, 0x64,
-	0x61, 0x72, 0x77, 0x69, 0x6e, 0x2e, 0x56, 0x65, 0x63, 0x74, 0x6f, 0x72, 0x34, 0x52, 0x08, 0x72,
-	0x6f, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0xf9, 0x01, 0x0a, 0x07, 0x45, 0x6c, 0x65, 0x6d,
-	0x65, 0x6e, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28,
-	0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x6d, 0x61, 0x74, 0x65, 0x72,
-	0x69, 0x61, 0x6c, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x6d, 0x61, 0x74, 0x65, 0x72,
-	0x69, 0x61, 0x6c, 0x12, 0x26, 0x0a, 0x06, 0x70, 0x68, 0x79, 0x73, 0x69, 0x63, 0x18, 0x03, 0x20,
-	0x01, 0x28, 0x0b, 0x32, 0x0e, 0x2e, 0x64, 0x61, 0x72, 0x77, 0x69, 0x6e, 0x2e, 0x50, 0x68, 0x79,
-	0x73, 0x69, 0x63, 0x52, 0x06, 0x70, 0x68, 0x79, 0x73, 0x69, 0x63, 0x12, 0x35, 0x0a, 0x09, 0x74,
-	0x79, 0x70, 0x65, 0x5f, 0x65, 0x6e, 0x75, 0x6d, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x18,
-	0x2e, 0x64, 0x61, 0x72, 0x77, 0x69, 0x6e, 0x2e, 0x45, 0x6c, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x2e,
-	0x54, 0x79, 0x70, 0x65, 0x45, 0x6e, 0x75, 0x6d, 0x52, 0x08, 0x74, 0x79, 0x70, 0x65, 0x45, 0x6e,
-	0x75, 0x6d, 0x22, 0x5f, 0x0a, 0x08, 0x54, 0x79, 0x70, 0x65, 0x45, 0x6e, 0x75, 0x6d, 0x12, 0x0a,
-	0x0a, 0x06, 0x55, 0x4b, 0x4e, 0x4f, 0x57, 0x4e, 0x10, 0x00, 0x12, 0x0a, 0x0a, 0x06, 0x47, 0x52,
-	0x4f, 0x55, 0x4e, 0x44, 0x10, 0x01, 0x12, 0x0d, 0x0a, 0x09, 0x45, 0x58, 0x50, 0x4c, 0x4f, 0x53,
-	0x49, 0x4f, 0x4e, 0x10, 0x02, 0x12, 0x0b, 0x0a, 0x07, 0x55, 0x50, 0x47, 0x52, 0x41, 0x44, 0x45,
-	0x10, 0x03, 0x12, 0x09, 0x0a, 0x05, 0x47, 0x52, 0x45, 0x45, 0x4e, 0x10, 0x04, 0x12, 0x09, 0x0a,
-	0x05, 0x42, 0x52, 0x4f, 0x57, 0x4e, 0x10, 0x05, 0x12, 0x09, 0x0a, 0x05, 0x57, 0x41, 0x54, 0x45,
-	0x52, 0x10, 0x06, 0x22, 0xa5, 0x01, 0x0a, 0x06, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x12, 0x12,
-	0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61,
-	0x6d, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x6d, 0x61, 0x74, 0x65, 0x72, 0x69, 0x61, 0x6c, 0x18, 0x02,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x6d, 0x61, 0x74, 0x65, 0x72, 0x69, 0x61, 0x6c, 0x12, 0x26,
-	0x0a, 0x06, 0x70, 0x68, 0x79, 0x73, 0x69, 0x63, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0e,
-	0x2e, 0x64, 0x61, 0x72, 0x77, 0x69, 0x6e, 0x2e, 0x50, 0x68, 0x79, 0x73, 0x69, 0x63, 0x52, 0x06,
-	0x70, 0x68, 0x79, 0x73, 0x69, 0x63, 0x12, 0x2a, 0x0a, 0x08, 0x67, 0x5f, 0x6e, 0x6f, 0x72, 0x6d,
-	0x61, 0x6c, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0f, 0x2e, 0x64, 0x61, 0x72, 0x77, 0x69,
-	0x6e, 0x2e, 0x56, 0x65, 0x63, 0x74, 0x6f, 0x72, 0x33, 0x52, 0x07, 0x67, 0x4e, 0x6f, 0x72, 0x6d,
-	0x61, 0x6c, 0x12, 0x17, 0x0a, 0x07, 0x67, 0x5f, 0x66, 0x6f, 0x72, 0x63, 0x65, 0x18, 0x05, 0x20,
-	0x01, 0x28, 0x01, 0x52, 0x06, 0x67, 0x46, 0x6f, 0x72, 0x63, 0x65, 0x22, 0x23, 0x0a, 0x0d, 0x55,
-	0x70, 0x64, 0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x12, 0x0a, 0x04,
-	0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65,
-	0x22, 0x7b, 0x0a, 0x0e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x12, 0x28, 0x0a, 0x07, 0x70, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x73, 0x18, 0x01, 0x20,
-	0x03, 0x28, 0x0b, 0x32, 0x0e, 0x2e, 0x64, 0x61, 0x72, 0x77, 0x69, 0x6e, 0x2e, 0x50, 0x6c, 0x61,
-	0x79, 0x65, 0x72, 0x52, 0x07, 0x70, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x73, 0x12, 0x2b, 0x0a, 0x08,
-	0x65, 0x6c, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x0f,
-	0x2e, 0x64, 0x61, 0x72, 0x77, 0x69, 0x6e, 0x2e, 0x45, 0x6c, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x52,
-	0x08, 0x65, 0x6c, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x73, 0x12, 0x12, 0x0a, 0x04, 0x74, 0x69, 0x6d,
-	0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x01, 0x52, 0x04, 0x74, 0x69, 0x6d, 0x65, 0x22, 0x49, 0x0a,
-	0x0b, 0x50, 0x75, 0x73, 0x68, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x12, 0x0a, 0x04,
-	0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65,
-	0x12, 0x26, 0x0a, 0x06, 0x70, 0x68, 0x79, 0x73, 0x69, 0x63, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b,
-	0x32, 0x0e, 0x2e, 0x64, 0x61, 0x72, 0x77, 0x69, 0x6e, 0x2e, 0x50, 0x68, 0x79, 0x73, 0x69, 0x63,
-	0x52, 0x06, 0x70, 0x68, 0x79, 0x73, 0x69, 0x63, 0x22, 0x0e, 0x0a, 0x0c, 0x50, 0x75, 0x73, 0x68,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0x7d, 0x0a, 0x0d, 0x44, 0x61, 0x72, 0x77,
-	0x69, 0x6e, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x39, 0x0a, 0x06, 0x55, 0x70, 0x64,
-	0x61, 0x74, 0x65, 0x12, 0x15, 0x2e, 0x64, 0x61, 0x72, 0x77, 0x69, 0x6e, 0x2e, 0x55, 0x70, 0x64,
-	0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x16, 0x2e, 0x64, 0x61, 0x72,
-	0x77, 0x69, 0x6e, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x30, 0x01, 0x12, 0x31, 0x0a, 0x04, 0x50, 0x75, 0x73, 0x68, 0x12, 0x13, 0x2e, 0x64,
-	0x61, 0x72, 0x77, 0x69, 0x6e, 0x2e, 0x50, 0x75, 0x73, 0x68, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
-	0x74, 0x1a, 0x14, 0x2e, 0x64, 0x61, 0x72, 0x77, 0x69, 0x6e, 0x2e, 0x50, 0x75, 0x73, 0x68, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x2b, 0x5a, 0x29, 0x67, 0x69, 0x74, 0x68, 0x75,
-	0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x61, 0x6e, 0x69, 0x72, 0x75, 0x6c, 0x2f, 0x67, 0x6f, 0x5f,
-	0x64, 0x61, 0x72, 0x77, 0x69, 0x6e, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2f, 0x64, 0x61,
-	0x72, 0x77, 0x69, 0x6e, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x05, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x11, 0x76,
+	0x65, 0x63, 0x74, 0x6f, 0x72, 0x5f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x1a, 0x15, 0x77, 0x6f, 0x72, 0x6c, 0x64, 0x5f, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x65, 0x74, 0x65,
+	0x72, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x23, 0x0a, 0x0d, 0x55, 0x70, 0x64, 0x61, 0x74,
+	0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x22, 0x82, 0x01, 0x0a,
+	0x0e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
+	0x30, 0x0a, 0x0a, 0x63, 0x68, 0x61, 0x72, 0x61, 0x63, 0x74, 0x65, 0x72, 0x73, 0x18, 0x01, 0x20,
+	0x03, 0x28, 0x0b, 0x32, 0x10, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x43, 0x68, 0x61, 0x72,
+	0x61, 0x63, 0x74, 0x65, 0x72, 0x52, 0x0a, 0x63, 0x68, 0x61, 0x72, 0x61, 0x63, 0x74, 0x65, 0x72,
+	0x73, 0x12, 0x2a, 0x0a, 0x08, 0x65, 0x6c, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x73, 0x18, 0x02, 0x20,
+	0x03, 0x28, 0x0b, 0x32, 0x0e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x45, 0x6c, 0x65, 0x6d,
+	0x65, 0x6e, 0x74, 0x52, 0x08, 0x65, 0x6c, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x73, 0x12, 0x12, 0x0a,
+	0x04, 0x74, 0x69, 0x6d, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x01, 0x52, 0x04, 0x74, 0x69, 0x6d,
+	0x65, 0x22, 0xfa, 0x01, 0x0a, 0x13, 0x52, 0x65, 0x70, 0x6f, 0x72, 0x74, 0x49, 0x6e, 0x47, 0x61,
+	0x6d, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d,
+	0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x25, 0x0a,
+	0x06, 0x70, 0x68, 0x79, 0x73, 0x69, 0x63, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0d, 0x2e,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x50, 0x68, 0x79, 0x73, 0x69, 0x63, 0x52, 0x06, 0x70, 0x68,
+	0x79, 0x73, 0x69, 0x63, 0x12, 0x23, 0x0a, 0x0d, 0x70, 0x6f, 0x74, 0x65, 0x6e, 0x74, 0x69, 0x61,
+	0x6c, 0x5f, 0x68, 0x69, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x70, 0x6f, 0x74,
+	0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x48, 0x69, 0x74, 0x12, 0x32, 0x0a, 0x0b, 0x73, 0x74, 0x61,
+	0x74, 0x75, 0x73, 0x5f, 0x65, 0x6e, 0x75, 0x6d, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x11,
+	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x45, 0x6e, 0x75,
+	0x6d, 0x52, 0x0a, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x45, 0x6e, 0x75, 0x6d, 0x12, 0x4f, 0x0a,
+	0x14, 0x73, 0x70, 0x65, 0x63, 0x69, 0x61, 0x6c, 0x5f, 0x65, 0x66, 0x66, 0x65, 0x63, 0x74, 0x5f,
+	0x62, 0x6f, 0x6f, 0x73, 0x74, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1d, 0x2e, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x2e, 0x53, 0x70, 0x65, 0x63, 0x69, 0x61, 0x6c, 0x45, 0x66, 0x66, 0x65, 0x63,
+	0x74, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x65, 0x74, 0x65, 0x72, 0x52, 0x12, 0x73, 0x70, 0x65, 0x63,
+	0x69, 0x61, 0x6c, 0x45, 0x66, 0x66, 0x65, 0x63, 0x74, 0x42, 0x6f, 0x6f, 0x73, 0x74, 0x22, 0x16,
+	0x0a, 0x14, 0x52, 0x65, 0x70, 0x6f, 0x72, 0x74, 0x49, 0x6e, 0x47, 0x61, 0x6d, 0x65, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x52, 0x0a, 0x16, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65,
+	0x43, 0x68, 0x61, 0x72, 0x61, 0x63, 0x74, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04,
+	0x6e, 0x61, 0x6d, 0x65, 0x12, 0x24, 0x0a, 0x05, 0x63, 0x6f, 0x6c, 0x6f, 0x72, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x0b, 0x32, 0x0e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x56, 0x65, 0x63, 0x74,
+	0x6f, 0x72, 0x33, 0x52, 0x05, 0x63, 0x6f, 0x6c, 0x6f, 0x72, 0x22, 0x4d, 0x0a, 0x17, 0x43, 0x72,
+	0x65, 0x61, 0x74, 0x65, 0x43, 0x68, 0x61, 0x72, 0x61, 0x63, 0x74, 0x65, 0x72, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x32, 0x0a, 0x0b, 0x72, 0x65, 0x74, 0x75, 0x72, 0x6e, 0x5f,
+	0x65, 0x6e, 0x75, 0x6d, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x11, 0x2e, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x2e, 0x52, 0x65, 0x74, 0x75, 0x72, 0x6e, 0x45, 0x6e, 0x75, 0x6d, 0x52, 0x0a, 0x72,
+	0x65, 0x74, 0x75, 0x72, 0x6e, 0x45, 0x6e, 0x75, 0x6d, 0x22, 0x23, 0x0a, 0x0b, 0x50, 0x69, 0x6e,
+	0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x14, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75,
+	0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x22, 0x7b,
+	0x0a, 0x0c, 0x50, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x14,
+	0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x05, 0x76,
+	0x61, 0x6c, 0x75, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x74, 0x69, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x01, 0x52, 0x04, 0x74, 0x69, 0x6d, 0x65, 0x12, 0x41, 0x0a, 0x10, 0x70, 0x6c, 0x61, 0x79,
+	0x65, 0x72, 0x5f, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x65, 0x74, 0x65, 0x72, 0x18, 0x03, 0x20, 0x01,
+	0x28, 0x0b, 0x32, 0x16, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x50, 0x6c, 0x61, 0x79, 0x65,
+	0x72, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x65, 0x74, 0x65, 0x72, 0x52, 0x0f, 0x70, 0x6c, 0x61, 0x79,
+	0x65, 0x72, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x65, 0x74, 0x65, 0x72, 0x32, 0x94, 0x02, 0x0a, 0x0d,
+	0x44, 0x61, 0x72, 0x77, 0x69, 0x6e, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x37, 0x0a,
+	0x06, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x12, 0x14, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e,
+	0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x15, 0x2e,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x30, 0x01, 0x12, 0x47, 0x0a, 0x0c, 0x52, 0x65, 0x70, 0x6f, 0x72, 0x74,
+	0x49, 0x6e, 0x47, 0x61, 0x6d, 0x65, 0x12, 0x1a, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x52,
+	0x65, 0x70, 0x6f, 0x72, 0x74, 0x49, 0x6e, 0x47, 0x61, 0x6d, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x52, 0x65, 0x70, 0x6f, 0x72,
+	0x74, 0x49, 0x6e, 0x47, 0x61, 0x6d, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
+	0x50, 0x0a, 0x0f, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x43, 0x68, 0x61, 0x72, 0x61, 0x63, 0x74,
+	0x65, 0x72, 0x12, 0x1d, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74,
+	0x65, 0x43, 0x68, 0x61, 0x72, 0x61, 0x63, 0x74, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x1a, 0x1e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65,
+	0x43, 0x68, 0x61, 0x72, 0x61, 0x63, 0x74, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x12, 0x2f, 0x0a, 0x04, 0x50, 0x69, 0x6e, 0x67, 0x12, 0x12, 0x2e, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x2e, 0x50, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x13, 0x2e,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x50, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x42, 0x31, 0x5a, 0x2f, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d,
+	0x2f, 0x61, 0x6e, 0x69, 0x72, 0x75, 0x6c, 0x2f, 0x67, 0x6f, 0x5f, 0x64, 0x61, 0x72, 0x77, 0x69,
+	0x6e, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2f, 0x64, 0x61, 0x72, 0x77, 0x69, 0x6e, 0x5f,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -787,41 +582,47 @@ func file_darwin_service_proto_rawDescGZIP() []byte {
 	return file_darwin_service_proto_rawDescData
 }
 
-var file_darwin_service_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_darwin_service_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_darwin_service_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_darwin_service_proto_goTypes = []interface{}{
-	(Element_TypeEnum)(0),  // 0: darwin.Element.TypeEnum
-	(*Vector3)(nil),        // 1: darwin.Vector3
-	(*Vector4)(nil),        // 2: darwin.Vector4
-	(*Physic)(nil),         // 3: darwin.Physic
-	(*Element)(nil),        // 4: darwin.Element
-	(*Player)(nil),         // 5: darwin.Player
-	(*UpdateRequest)(nil),  // 6: darwin.UpdateRequest
-	(*UpdateResponse)(nil), // 7: darwin.UpdateResponse
-	(*PushRequest)(nil),    // 8: darwin.PushRequest
-	(*PushResponse)(nil),   // 9: darwin.PushResponse
+	(*UpdateRequest)(nil),           // 0: proto.UpdateRequest
+	(*UpdateResponse)(nil),          // 1: proto.UpdateResponse
+	(*ReportInGameRequest)(nil),     // 2: proto.ReportInGameRequest
+	(*ReportInGameResponse)(nil),    // 3: proto.ReportInGameResponse
+	(*CreateCharacterRequest)(nil),  // 4: proto.CreateCharacterRequest
+	(*CreateCharacterResponse)(nil), // 5: proto.CreateCharacterResponse
+	(*PingRequest)(nil),             // 6: proto.PingRequest
+	(*PingResponse)(nil),            // 7: proto.PingResponse
+	(*Character)(nil),               // 8: proto.Character
+	(*Element)(nil),                 // 9: proto.Element
+	(*Physic)(nil),                  // 10: proto.Physic
+	(StatusEnum)(0),                 // 11: proto.StatusEnum
+	(*SpecialEffectParameter)(nil),  // 12: proto.SpecialEffectParameter
+	(*Vector3)(nil),                 // 13: proto.Vector3
+	(ReturnEnum)(0),                 // 14: proto.ReturnEnum
+	(*PlayerParameter)(nil),         // 15: proto.PlayerParameter
 }
 var file_darwin_service_proto_depIdxs = []int32{
-	1,  // 0: darwin.Physic.position:type_name -> darwin.Vector3
-	1,  // 1: darwin.Physic.velocity:type_name -> darwin.Vector3
-	2,  // 2: darwin.Physic.orientation:type_name -> darwin.Vector4
-	2,  // 3: darwin.Physic.rotation:type_name -> darwin.Vector4
-	3,  // 4: darwin.Element.physic:type_name -> darwin.Physic
-	0,  // 5: darwin.Element.type_enum:type_name -> darwin.Element.TypeEnum
-	3,  // 6: darwin.Player.physic:type_name -> darwin.Physic
-	1,  // 7: darwin.Player.g_normal:type_name -> darwin.Vector3
-	5,  // 8: darwin.UpdateResponse.players:type_name -> darwin.Player
-	4,  // 9: darwin.UpdateResponse.elements:type_name -> darwin.Element
-	3,  // 10: darwin.PushRequest.physic:type_name -> darwin.Physic
-	6,  // 11: darwin.DarwinService.Update:input_type -> darwin.UpdateRequest
-	8,  // 12: darwin.DarwinService.Push:input_type -> darwin.PushRequest
-	7,  // 13: darwin.DarwinService.Update:output_type -> darwin.UpdateResponse
-	9,  // 14: darwin.DarwinService.Push:output_type -> darwin.PushResponse
-	13, // [13:15] is the sub-list for method output_type
-	11, // [11:13] is the sub-list for method input_type
-	11, // [11:11] is the sub-list for extension type_name
-	11, // [11:11] is the sub-list for extension extendee
-	0,  // [0:11] is the sub-list for field type_name
+	8,  // 0: proto.UpdateResponse.characters:type_name -> proto.Character
+	9,  // 1: proto.UpdateResponse.elements:type_name -> proto.Element
+	10, // 2: proto.ReportInGameRequest.physic:type_name -> proto.Physic
+	11, // 3: proto.ReportInGameRequest.status_enum:type_name -> proto.StatusEnum
+	12, // 4: proto.ReportInGameRequest.special_effect_boost:type_name -> proto.SpecialEffectParameter
+	13, // 5: proto.CreateCharacterRequest.color:type_name -> proto.Vector3
+	14, // 6: proto.CreateCharacterResponse.return_enum:type_name -> proto.ReturnEnum
+	15, // 7: proto.PingResponse.player_parameter:type_name -> proto.PlayerParameter
+	0,  // 8: proto.DarwinService.Update:input_type -> proto.UpdateRequest
+	2,  // 9: proto.DarwinService.ReportInGame:input_type -> proto.ReportInGameRequest
+	4,  // 10: proto.DarwinService.CreateCharacter:input_type -> proto.CreateCharacterRequest
+	6,  // 11: proto.DarwinService.Ping:input_type -> proto.PingRequest
+	1,  // 12: proto.DarwinService.Update:output_type -> proto.UpdateResponse
+	3,  // 13: proto.DarwinService.ReportInGame:output_type -> proto.ReportInGameResponse
+	5,  // 14: proto.DarwinService.CreateCharacter:output_type -> proto.CreateCharacterResponse
+	7,  // 15: proto.DarwinService.Ping:output_type -> proto.PingResponse
+	12, // [12:16] is the sub-list for method output_type
+	8,  // [8:12] is the sub-list for method input_type
+	8,  // [8:8] is the sub-list for extension type_name
+	8,  // [8:8] is the sub-list for extension extendee
+	0,  // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_darwin_service_proto_init() }
@@ -829,68 +630,10 @@ func file_darwin_service_proto_init() {
 	if File_darwin_service_proto != nil {
 		return
 	}
+	file_vector_math_proto_init()
+	file_world_parameter_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_darwin_service_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Vector3); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_darwin_service_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Vector4); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_darwin_service_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Physic); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_darwin_service_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Element); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_darwin_service_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Player); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_darwin_service_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*UpdateRequest); i {
 			case 0:
 				return &v.state
@@ -902,7 +645,7 @@ func file_darwin_service_proto_init() {
 				return nil
 			}
 		}
-		file_darwin_service_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+		file_darwin_service_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*UpdateResponse); i {
 			case 0:
 				return &v.state
@@ -914,8 +657,8 @@ func file_darwin_service_proto_init() {
 				return nil
 			}
 		}
-		file_darwin_service_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PushRequest); i {
+		file_darwin_service_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ReportInGameRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -926,8 +669,56 @@ func file_darwin_service_proto_init() {
 				return nil
 			}
 		}
-		file_darwin_service_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PushResponse); i {
+		file_darwin_service_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ReportInGameResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_darwin_service_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*CreateCharacterRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_darwin_service_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*CreateCharacterResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_darwin_service_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*PingRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_darwin_service_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*PingResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -944,14 +735,13 @@ func file_darwin_service_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_darwin_service_proto_rawDesc,
-			NumEnums:      1,
-			NumMessages:   9,
+			NumEnums:      0,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
 		GoTypes:           file_darwin_service_proto_goTypes,
 		DependencyIndexes: file_darwin_service_proto_depIdxs,
-		EnumInfos:         file_darwin_service_proto_enumTypes,
 		MessageInfos:      file_darwin_service_proto_msgTypes,
 	}.Build()
 	File_darwin_service_proto = out.File
