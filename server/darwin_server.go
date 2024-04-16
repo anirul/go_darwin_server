@@ -1,11 +1,11 @@
 package server
 
 import (
-	darwin "github.com/anirul/go_darwin_server/darwin"
+	proto "github.com/anirul/go_darwin_server/darwin_proto"
 )
 
 type DarwinService struct {
-	darwin.UnimplementedDarwinServiceServer
+	proto.UnimplementedDarwinServiceServer
 }
 
 func NewDarwinService() *DarwinService {

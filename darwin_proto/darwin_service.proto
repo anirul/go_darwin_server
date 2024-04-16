@@ -1,0 +1,91 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "github.com/anirul/go_darwin_server/darwin_proto";
+
+import "vector_math.proto";
+import "world_parameter.proto";
+
+// UpdateRequest
+// Next: 2
+message UpdateRequest {
+    // Ask for a named object.
+    string name = 1;
+}
+
+// UpdateResponse
+// Next: 4
+message UpdateResponse {
+    // Character list and position.
+    repeated Character characters = 1;
+    // Elements list and position.
+    repeated Element elements = 2;
+    // Present time on the server.
+    double time = 3;
+}
+
+// ReportInGameRequest
+// Next: 6
+message ReportInGameRequest {
+    // Character name.
+    string name = 1;
+    // New physic.
+    Physic physic = 2;
+    // Name of potential hit.
+    string potential_hit = 3;
+    // Character status.
+    StatusEnum status_enum = 4;
+    // Character special effect.
+    SpecialEffectParameter special_effect_boost = 5;
+}
+
+// ReportInGameResponse
+// Next: 1
+message ReportInGameResponse {}
+
+// CreateCharacterRequest
+// Next: 3
+message CreateCharacterRequest {
+    // Character name.
+    string name = 1;
+    // Character color.
+    Vector3 color = 2;
+}
+
+// CreateCharacterResponse
+// Next: 2
+message CreateCharacterResponse {
+    // Return enum.
+    ReturnEnum return_enum = 1;
+}
+
+// PingRequest
+// Next: 2
+message PingRequest {
+    // Value to check.
+    int32 value = 1;
+}
+
+// PingResponse
+// Next: 4
+message PingResponse {
+    // Returned value.
+    int32 value = 1;
+    // Present time on the server.
+    double time = 2;
+    // Player parameter (used to set parameters).
+    PlayerParameter player_parameter = 3;
+}
+
+// The darwin service.
+service DarwinService {
+    // Update the position of object in the world to the clients.
+    rpc Update(UpdateRequest) returns (stream UpdateResponse);
+    // Client report the change of position and speed of a player.
+    rpc ReportInGame(ReportInGameRequest) returns (ReportInGameResponse);
+    // Create a new character.
+    rpc CreateCharacter(CreateCharacterRequest) returns (CreateCharacterResponse);
+    // Ping the server.
+    rpc Ping(PingRequest) returns (PingResponse);
+}

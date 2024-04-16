@@ -6,7 +6,7 @@ import (
 	"log"
 	"net"
 
-	darwin "github.com/anirul/go_darwin_server/darwin"
+	proto "github.com/anirul/go_darwin_server/darwin_proto"
 	server "github.com/anirul/go_darwin_server/server"
 	"google.golang.org/grpc"
 )
@@ -24,6 +24,6 @@ func main() {
 	}
 	var opts []grpc.ServerOption
 	grpcServer := grpc.NewServer(opts...)
-	darwin.RegisterDarwinServiceServer(grpcServer, server.NewDarwinService())
+	proto.RegisterDarwinServiceServer(grpcServer, server.NewDarwinService())
 	grpcServer.Serve(lis)
 }
