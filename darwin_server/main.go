@@ -9,7 +9,7 @@ import (
 	"os"
 
 	proto "github.com/anirul/go_darwin_server/darwin_proto"
-	server "github.com/anirul/go_darwin_server/server"
+	service "github.com/anirul/go_darwin_server/darwin_service"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/encoding/protojson"
 )
@@ -50,6 +50,6 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed at service creation: %v", err)
 	}
-	proto.RegisterDarwinServiceServer(grpcServer, server.NewDarwinService(param))
+	proto.RegisterDarwinServiceServer(grpcServer, service.NewDarwinService(param))
 	grpcServer.Serve(lis)
 }
