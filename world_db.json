@@ -1,0 +1,87 @@
+{
+  "elements": [
+    {
+      "name": "earth",
+      "color": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "physic": {
+        "radius": 100.0,
+        "mass": 2.0e15,
+        "position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "position_dt": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "orientation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "orientation_dt": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        }
+      },
+      "type_enum": "TYPE_GROUND"
+    }
+  ],
+  "characters": [],
+  "time": 0.0,
+  "player_parameter": {
+    "vertical_speed": 12.0,
+    "horizontal_speed": 12.0,
+    "boost_speed": 18.0,
+    "start_mass": 4.0,
+    "drop_height": 10.0,
+    "living_cost": 0.005,
+    "eat_speed": 0.7,
+    "penalty": -0.3,
+    "friction": 0.1,
+    "victory_size": 100.0,
+    "max_upgrade_grow": 80.0,
+    "disconnection_timeout": 10.0,
+    "color_parameters": [
+      {
+        "name": "red",
+        "color": {
+          "x": 1.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      {
+        "name": "green",
+        "color": {
+          "x": 0.0,
+          "y": 1.0,
+          "z": 0.0
+        }
+      },
+      {
+        "name": "blue",
+        "color": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 1.0
+        }
+      }
+    ],
+    "special_effect_boost": {
+      "special_state_enum": "SPECIAL_STATE_WAIT",
+      "effect_duration": 0.5,
+      "cooldown_duration": 5.0,
+      "counter": 0.0
+    }
+  }
+}

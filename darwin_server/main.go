@@ -19,9 +19,9 @@ var (
 	playerParam = flag.String("player_parameter", "./player_parameter.json", "Player parameter json file")
 )
 
-func ParseJsonPlayerParam(f string) (*proto.PlayerParameter, error) {
+func ParseJsonPlayerParam(f string) (*proto.WorldDatabase, error) {
 	file, err := os.Open(f)
-	params := &proto.PlayerParameter{}
+	params := &proto.WorldDatabase{}
 	if err != nil {
 		return params, err
 	}
