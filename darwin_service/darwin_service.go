@@ -8,7 +8,7 @@ import (
 
 	"google.golang.org/grpc/peer"
 
-	darwin "github.com/anirul/go_darwin_server/darwin_math"
+	math "github.com/anirul/go_darwin_server/darwin_math"
 	proto "github.com/anirul/go_darwin_server/darwin_proto"
 )
 
@@ -37,7 +37,7 @@ func (s *DarwinService) Ping(
 	*proto.PingResponse, error) {
 	return &proto.PingResponse{
 		Value:           pingRequest.GetValue(),
-		Time:            darwin.TimeSecondNow(),
+		Time:            math.TimeSecondNow(),
 		PlayerParameter: s.world.PlayerParameter,
 	}, nil
 }
@@ -64,18 +64,18 @@ func (s *DarwinService) CreateCharacter(
 				errors.New("name already taken")
 		}
 	}
-	if !darwin.IsInColor(createRequest.Color, s.world.PlayerParameter.ColorParameters) {
+	if !math.IsInColor(createRequest.Color, s.world.PlayerParameter.ColorParameters) {
 		return &proto.CreateCharacterResponse{ReturnEnum: proto.ReturnEnum_RETURN_REJECTED},
 			errors.New("not a valid color")
 	}
 	planet := s.Planet()
-	randomNormalizeVec3 := darwin.RandomNormalizeVec3()
+	randomNormalizeVec3 := math.RandomNormalizeVec3()
 	newCharacter := &proto.Character{}
 	newCharacter.Name = createRequest.Name
 	newCharacter.Color = createRequest.Color
-	newCharacter.Physic.Radius = darwin.RadiusFromVolume(s.world.PlayerParameter.StartMass)
+	newCharacter.Physic.Radius = math.RadiusFromVolume(s.world.PlayerParameter.StartMass)
 	newCharacter.Physic.Mass = s.world.PlayerParameter.StartMass
-	newCharacter.Physic.Position = darwin.Times(
+	newCharacter.Physic.Position = math.Times(
 		randomNormalizeVec3,
 		planet.Physic.Radius+s.world.PlayerParameter.DropHeight)
 	newCharacter.StatusEnum = proto.StatusEnum_STATUS_LOADING
@@ -92,7 +92,7 @@ func (s *DarwinService) Update(
 		err := stream.Send(&proto.UpdateResponse{
 			Characters: s.world.Characters,
 			Elements:   s.world.Elements,
-			Time:       darwin.TimeSecondNow(),
+			Time:       math.TimeSecondNow(),
 		})
 		s.mu.Unlock()
 		if err != nil {
