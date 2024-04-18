@@ -12,11 +12,17 @@ import (
 	proto "github.com/anirul/go_darwin_server/darwin_proto"
 )
 
+type CharacterHit struct {
+	character proto.Character
+	hit       string
+}
+
 type DarwinService struct {
 	proto.UnimplementedDarwinServiceServer
-	mu        sync.Mutex
-	world     *proto.WorldDatabase
-	peerChars map[string]string
+	mu            sync.Mutex
+	world         *proto.WorldDatabase
+	peerChars     map[string]string
+	potentialHits []CharacterHit
 }
 
 func NewDarwinService(worldDatabase *proto.WorldDatabase) *DarwinService {
@@ -32,6 +38,14 @@ func (s *DarwinService) Planet() *proto.Element {
 	return nil
 }
 
+func (s *DarwinService) Peer(ctx context.Context) (*peer.Peer, error) {
+	p, ok := peer.FromContext(ctx)
+	if !ok {
+		return nil, errors.New("invalid peer")
+	}
+	return p, nil
+}
+
 func (s *DarwinService) Ping(
 	ctx context.Context, pingRequest *proto.PingRequest) (
 	*proto.PingResponse, error) {
@@ -45,16 +59,43 @@ func (s *DarwinService) Ping(
 func (s *DarwinService) ReportInGame(
 	ctx context.Context, reportRequest *proto.ReportInGameRequest) (
 	*proto.ReportInGameResponse, error) {
-	return nil, nil
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	p, err := s.Peer(ctx)
+	if err != nil {
+		return &proto.ReportInGameResponse{}, err
+	}
+	_, exists := s.peerChars[p.Addr.String()]
+	if !exists {
+		return &proto.ReportInGameResponse{}, errors.New("you don't exist")
+	}
+	found := false
+	for i, character := range s.world.Characters {
+		if character.Name == reportRequest.Name {
+			s.world.Characters[i].Physic = reportRequest.Physic
+			s.world.Characters[i].StatusEnum = reportRequest.StatusEnum
+			s.world.Characters[i].SpecialEffectBoost = reportRequest.SpecialEffectBoost
+			if reportRequest.PotentialHit != "" {
+				s.potentialHits = append(
+					s.potentialHits,
+					CharacterHit{*character, reportRequest.PotentialHit},
+				)
+			}
+			found = true
+		}
+	}
+	if !found {
+		return &proto.ReportInGameResponse{}, errors.New("didn't found")
+	}
+	return &proto.ReportInGameResponse{}, nil
 }
 
 func (s *DarwinService) CreateCharacter(
 	ctx context.Context, createRequest *proto.CreateCharacterRequest) (
 	*proto.CreateCharacterResponse, error) {
-	p, ok := peer.FromContext(ctx)
-	if !ok {
-		return &proto.CreateCharacterResponse{ReturnEnum: proto.ReturnEnum_RETURN_ERROR},
-			errors.New("invalid peer")
+	p, err := s.Peer(ctx)
+	if err != nil {
+		return &proto.CreateCharacterResponse{ReturnEnum: proto.ReturnEnum_RETURN_ERROR}, err
 	}
 	s.mu.Lock()
 	defer s.mu.Unlock()
