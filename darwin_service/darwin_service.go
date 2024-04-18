@@ -3,6 +3,7 @@ package darwin_service
 import (
 	"context"
 	"errors"
+	"fmt"
 	"sync"
 	"time"
 
@@ -26,12 +27,12 @@ type DarwinService struct {
 }
 
 func NewDarwinService(worldDatabase *proto.WorldDatabase) *DarwinService {
-	return &DarwinService{world: worldDatabase}
+	return &DarwinService{world: worldDatabase, peerChars: make(map[string]string)}
 }
 
 func (s *DarwinService) Planet() *proto.Element {
 	for _, p := range s.world.Elements {
-		if p.Physic.Radius > 100 {
+		if p.Name == "earth" && p.TypeEnum == proto.TypeEnum_TYPE_GROUND {
 			return p
 		}
 	}
@@ -59,15 +60,13 @@ func (s *DarwinService) Ping(
 func (s *DarwinService) ReportInGame(
 	ctx context.Context, reportRequest *proto.ReportInGameRequest) (
 	*proto.ReportInGameResponse, error) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
 	p, err := s.Peer(ctx)
 	if err != nil {
-		return &proto.ReportInGameResponse{}, err
+		return &proto.ReportInGameResponse{}, nil
 	}
 	_, exists := s.peerChars[p.Addr.String()]
 	if !exists {
-		return &proto.ReportInGameResponse{}, errors.New("you don't exist")
+		return &proto.ReportInGameResponse{}, nil
 	}
 	found := false
 	for i, character := range s.world.Characters {
@@ -82,10 +81,11 @@ func (s *DarwinService) ReportInGame(
 				)
 			}
 			found = true
+			return &proto.ReportInGameResponse{}, nil
 		}
 	}
 	if !found {
-		return &proto.ReportInGameResponse{}, errors.New("didn't found")
+		return &proto.ReportInGameResponse{}, nil
 	}
 	return &proto.ReportInGameResponse{}, nil
 }
@@ -95,25 +95,25 @@ func (s *DarwinService) CreateCharacter(
 	*proto.CreateCharacterResponse, error) {
 	p, err := s.Peer(ctx)
 	if err != nil {
-		return &proto.CreateCharacterResponse{ReturnEnum: proto.ReturnEnum_RETURN_ERROR}, err
+		return &proto.CreateCharacterResponse{ReturnEnum: proto.ReturnEnum_RETURN_ERROR}, nil
 	}
-	s.mu.Lock()
-	defer s.mu.Unlock()
 	for _, character := range s.world.Characters {
 		if character.Name == createRequest.Name {
-			return &proto.CreateCharacterResponse{ReturnEnum: proto.ReturnEnum_RETURN_REJECTED},
-				errors.New("name already taken")
+			return &proto.CreateCharacterResponse{ReturnEnum: proto.ReturnEnum_RETURN_REJECTED}, nil
 		}
 	}
 	if !math.IsInColor(createRequest.Color, s.world.PlayerParameter.ColorParameters) {
-		return &proto.CreateCharacterResponse{ReturnEnum: proto.ReturnEnum_RETURN_REJECTED},
-			errors.New("not a valid color")
+		return &proto.CreateCharacterResponse{ReturnEnum: proto.ReturnEnum_RETURN_REJECTED}, nil
 	}
 	planet := s.Planet()
+	if planet == nil {
+		return &proto.CreateCharacterResponse{ReturnEnum: proto.ReturnEnum_RETURN_ERROR}, nil
+	}
 	randomNormalizeVec3 := math.RandomNormalizeVec3()
 	newCharacter := &proto.Character{}
 	newCharacter.Name = createRequest.Name
 	newCharacter.Color = createRequest.Color
+	newCharacter.Physic = &proto.Physic{}
 	newCharacter.Physic.Radius = math.RadiusFromVolume(s.world.PlayerParameter.StartMass)
 	newCharacter.Physic.Mass = s.world.PlayerParameter.StartMass
 	newCharacter.Physic.Position = math.Times(
@@ -139,5 +139,6 @@ func (s *DarwinService) Update(
 		if err != nil {
 			return err
 		}
+		fmt.Print(".")
 	}
 }
