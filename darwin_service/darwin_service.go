@@ -18,16 +18,21 @@ type CharacterHit struct {
 	hit       string
 }
 
+type PeerClient struct {
+	characterName string
+	lastSeen      float64
+}
+
 type DarwinService struct {
 	proto.UnimplementedDarwinServiceServer
 	mu            sync.Mutex
 	world         *proto.WorldDatabase
-	peerChars     map[string]string
+	peerChars     map[string]PeerClient
 	potentialHits []CharacterHit
 }
 
 func NewDarwinService(worldDatabase *proto.WorldDatabase) *DarwinService {
-	return &DarwinService{world: worldDatabase, peerChars: make(map[string]string)}
+	return &DarwinService{world: worldDatabase, peerChars: make(map[string]PeerClient)}
 }
 
 func (s *DarwinService) Planet() *proto.Element {
@@ -50,6 +55,8 @@ func (s *DarwinService) Peer(ctx context.Context) (*peer.Peer, error) {
 func (s *DarwinService) Ping(
 	ctx context.Context, pingRequest *proto.PingRequest) (
 	*proto.PingResponse, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
 	return &proto.PingResponse{
 		Value:           pingRequest.GetValue(),
 		Time:            math.TimeSecondNow(),
@@ -60,6 +67,8 @@ func (s *DarwinService) Ping(
 func (s *DarwinService) ReportInGame(
 	ctx context.Context, reportRequest *proto.ReportInGameRequest) (
 	*proto.ReportInGameResponse, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
 	p, err := s.Peer(ctx)
 	if err != nil {
 		return &proto.ReportInGameResponse{}, nil
@@ -80,6 +89,7 @@ func (s *DarwinService) ReportInGame(
 					CharacterHit{*character, reportRequest.PotentialHit},
 				)
 			}
+			s.peerChars[p.Addr.String()] = PeerClient{character.Name, math.TimeSecondNow()}
 			found = true
 			return &proto.ReportInGameResponse{}, nil
 		}
@@ -93,6 +103,8 @@ func (s *DarwinService) ReportInGame(
 func (s *DarwinService) CreateCharacter(
 	ctx context.Context, createRequest *proto.CreateCharacterRequest) (
 	*proto.CreateCharacterResponse, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
 	p, err := s.Peer(ctx)
 	if err != nil {
 		return &proto.CreateCharacterResponse{ReturnEnum: proto.ReturnEnum_RETURN_ERROR}, nil
@@ -120,7 +132,7 @@ func (s *DarwinService) CreateCharacter(
 		randomNormalizeVec3,
 		planet.Physic.Radius+s.world.PlayerParameter.DropHeight)
 	newCharacter.StatusEnum = proto.StatusEnum_STATUS_LOADING
-	s.peerChars[p.Addr.String()] = createRequest.Name
+	s.peerChars[p.Addr.String()] = PeerClient{createRequest.Name, math.TimeSecondNow()}
 	s.world.Characters = append(s.world.Characters, newCharacter)
 	return &proto.CreateCharacterResponse{ReturnEnum: proto.ReturnEnum_RETURN_OK}, nil
 }
@@ -129,6 +141,7 @@ func (s *DarwinService) Update(
 	req *proto.UpdateRequest, stream proto.DarwinService_UpdateServer) error {
 	for {
 		time.Sleep(time.Millisecond * 100)
+		fmt.Printf("\r[%.3f] Processing...", math.TimeSecondNow())
 		s.mu.Lock()
 		err := stream.Send(&proto.UpdateResponse{
 			Characters: s.world.Characters,
@@ -139,6 +152,5 @@ func (s *DarwinService) Update(
 		if err != nil {
 			return err
 		}
-		fmt.Print(".")
 	}
 }
