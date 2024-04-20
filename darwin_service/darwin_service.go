@@ -14,8 +14,9 @@ import (
 )
 
 type CharacterHit struct {
-	character proto.Character
-	hit       string
+	ptr       *proto.Character
+	position  proto.Vector3
+	hitTarget string
 }
 
 type PeerClient struct {
@@ -35,7 +36,7 @@ func NewDarwinService(worldDatabase *proto.WorldDatabase) *DarwinService {
 	return &DarwinService{world: worldDatabase, peerChars: make(map[string]PeerClient)}
 }
 
-func (s *DarwinService) Planet() *proto.Element {
+func (s *DarwinService) planet() *proto.Element {
 	for _, p := range s.world.Elements {
 		if p.Name == "earth" && p.TypeEnum == proto.TypeEnum_TYPE_GROUND {
 			return p
@@ -44,7 +45,7 @@ func (s *DarwinService) Planet() *proto.Element {
 	return nil
 }
 
-func (s *DarwinService) Peer(ctx context.Context) (*peer.Peer, error) {
+func (s *DarwinService) peer(ctx context.Context) (*peer.Peer, error) {
 	p, ok := peer.FromContext(ctx)
 	if !ok {
 		return nil, errors.New("invalid peer")
@@ -69,7 +70,7 @@ func (s *DarwinService) ReportInGame(
 	*proto.ReportInGameResponse, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
-	p, err := s.Peer(ctx)
+	p, err := s.peer(ctx)
 	if err != nil {
 		return &proto.ReportInGameResponse{}, nil
 	}
@@ -86,7 +87,13 @@ func (s *DarwinService) ReportInGame(
 			if reportRequest.PotentialHit != "" {
 				s.potentialHits = append(
 					s.potentialHits,
-					CharacterHit{*character, reportRequest.PotentialHit},
+					CharacterHit{
+						ptr: character,
+						position: proto.Vector3{
+							X: character.Physic.Position.X,
+							Y: character.Physic.Position.Y,
+							Z: character.Physic.Position.Z},
+						hitTarget: reportRequest.PotentialHit},
 				)
 			}
 			s.peerChars[p.Addr.String()] = PeerClient{character.Name, math.TimeSecondNow()}
@@ -105,7 +112,7 @@ func (s *DarwinService) CreateCharacter(
 	*proto.CreateCharacterResponse, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
-	p, err := s.Peer(ctx)
+	p, err := s.peer(ctx)
 	if err != nil {
 		return &proto.CreateCharacterResponse{ReturnEnum: proto.ReturnEnum_RETURN_ERROR}, nil
 	}
@@ -117,7 +124,7 @@ func (s *DarwinService) CreateCharacter(
 	if !math.IsInColor(createRequest.Color, s.world.PlayerParameter.ColorParameters) {
 		return &proto.CreateCharacterResponse{ReturnEnum: proto.ReturnEnum_RETURN_REJECTED}, nil
 	}
-	planet := s.Planet()
+	planet := s.planet()
 	if planet == nil {
 		return &proto.CreateCharacterResponse{ReturnEnum: proto.ReturnEnum_RETURN_ERROR}, nil
 	}
@@ -146,8 +153,7 @@ func (s *DarwinService) Update(
 		err := stream.Send(&proto.UpdateResponse{
 			Characters: s.world.Characters,
 			Elements:   s.world.Elements,
-			Time:       math.TimeSecondNow(),
-		})
+			Time:       math.TimeSecondNow()})
 		s.mu.Unlock()
 		if err != nil {
 			return err
