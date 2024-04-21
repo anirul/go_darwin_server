@@ -15,9 +15,17 @@ import (
 
 type CharacterHit struct {
 	ptr       *proto.Character
-	position  proto.Vector3
+	physic    proto.Physic
 	hitTarget string
 }
+
+type HitType int
+
+const (
+	HitTypeNone HitType = iota
+	HitTypeElement
+	HitTypeCharacter
+)
 
 type PeerClient struct {
 	characterName string
@@ -51,6 +59,85 @@ func (s *DarwinService) peer(ctx context.Context) (*peer.Peer, error) {
 		return nil, errors.New("invalid peer")
 	}
 	return p, nil
+}
+
+func (s *DarwinService) removeDisconnected() {
+	for key, value := range s.peerChars {
+		if math.TimeSecondNow()-value.lastSeen > 10 {
+			for i, character := range s.world.Characters {
+				if character.Name == value.characterName {
+					s.world.Characters = append(
+						s.world.Characters[:i], s.world.Characters[i+1:]...)
+					delete(s.peerChars, key)
+					break
+				}
+			}
+		}
+	}
+}
+
+func (s *DarwinService) physicAndColor(name string) (HitType, *proto.Physic, *proto.Vector3) {
+	for _, character := range s.world.Characters {
+		if character.Name == name {
+			return HitTypeCharacter, character.Physic, character.Color
+		}
+	}
+	for _, element := range s.world.Elements {
+		if element.Name == name {
+			return HitTypeElement, element.Physic, element.Color
+		}
+	}
+	return HitTypeNone, nil, nil
+}
+
+func (s *DarwinService) checkHit() {
+	for _, ch := range s.potentialHits {
+		ht, physic, color := s.physicAndColor(ch.hitTarget)
+		switch ht {
+		case HitTypeNone:
+			continue
+		case HitTypeElement:
+			if !math.IsIntersecting(&ch.physic, physic) {
+				continue
+			}
+			if math.IsEqualVector3(ch.ptr.Color, color) {
+				ch.ptr.Physic.Mass += s.world.PlayerParameter.Penalty
+				ch.ptr.Physic.Radius = math.RadiusFromVolume(ch.ptr.Physic.Mass)
+			} else {
+				ch.ptr.Physic.Mass += 1.0
+				ch.ptr.Physic.Radius = math.RadiusFromVolume(ch.ptr.Physic.Mass)
+				for i, element := range s.world.Elements {
+					if element.Name == ch.hitTarget {
+						s.world.Elements = append(
+							s.world.Elements[:i], s.world.Elements[i+1:]...)
+					}
+				}
+			}
+		case HitTypeCharacter:
+			if !math.IsIntersecting(&ch.physic, physic) {
+				continue
+			}
+			if math.IsEqualVector3(ch.ptr.Color, color) {
+				totalMass := ch.ptr.Physic.Mass + physic.Mass
+				ch.ptr.Physic.Mass = totalMass / 2
+				ch.ptr.Physic.Radius = math.RadiusFromVolume(totalMass / 2)
+				physic.Mass = totalMass / 2
+				physic.Radius = math.RadiusFromVolume(totalMass / 2)
+			} else {
+				if ch.ptr.Physic.Mass < physic.Mass {
+					ch.ptr.Physic.Mass -= s.world.PlayerParameter.EatSpeed
+					ch.ptr.Physic.Radius = math.RadiusFromVolume(ch.ptr.Physic.Mass)
+					physic.Mass += s.world.PlayerParameter.EatSpeed
+					physic.Radius = math.RadiusFromVolume(physic.Mass)
+				} else {
+					ch.ptr.Physic.Mass += s.world.PlayerParameter.EatSpeed
+					ch.ptr.Physic.Radius = math.RadiusFromVolume(ch.ptr.Physic.Mass)
+					physic.Mass -= s.world.PlayerParameter.EatSpeed
+					physic.Radius = math.RadiusFromVolume(physic.Mass)
+				}
+			}
+		}
+	}
 }
 
 func (s *DarwinService) Ping(
@@ -88,11 +175,8 @@ func (s *DarwinService) ReportInGame(
 				s.potentialHits = append(
 					s.potentialHits,
 					CharacterHit{
-						ptr: character,
-						position: proto.Vector3{
-							X: character.Physic.Position.X,
-							Y: character.Physic.Position.Y,
-							Z: character.Physic.Position.Z},
+						ptr:       character,
+						physic:    *reportRequest.Physic,
 						hitTarget: reportRequest.PotentialHit},
 				)
 			}
@@ -150,6 +234,8 @@ func (s *DarwinService) Update(
 		time.Sleep(time.Millisecond * 100)
 		fmt.Printf("\r[%.3f] Processing...", math.TimeSecondNow())
 		s.mu.Lock()
+		s.removeDisconnected()
+		s.checkHit()
 		err := stream.Send(&proto.UpdateResponse{
 			Characters: s.world.Characters,
 			Elements:   s.world.Elements,
