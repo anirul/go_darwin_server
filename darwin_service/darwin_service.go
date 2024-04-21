@@ -177,8 +177,7 @@ func (s *DarwinService) ReportInGame(
 					CharacterHit{
 						ptr:       character,
 						physic:    *reportRequest.Physic,
-						hitTarget: reportRequest.PotentialHit},
-				)
+						hitTarget: reportRequest.PotentialHit})
 			}
 			s.peerChars[p.Addr.String()] = PeerClient{character.Name, math.TimeSecondNow()}
 			found = true
