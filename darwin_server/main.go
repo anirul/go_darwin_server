@@ -5,9 +5,11 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"math/rand"
 	"net"
 	"os"
 
+	math "github.com/anirul/go_darwin_server/darwin_math"
 	proto "github.com/anirul/go_darwin_server/darwin_proto"
 	service "github.com/anirul/go_darwin_server/darwin_service"
 	"google.golang.org/grpc"
@@ -37,6 +39,31 @@ func ParseJsonPlayerParam(f string) (*proto.WorldDatabase, error) {
 	return params, nil
 }
 
+func PopulateWorldDatabase(worldDatabase *proto.WorldDatabase, nbBonus int) (*proto.WorldDatabase, error) {
+	planet := &proto.Element{}
+	for _, e := range worldDatabase.Elements {
+		if e.Name == "earth" && e.TypeEnum == proto.TypeEnum_TYPE_GROUND {
+			planet = e
+		}
+	}
+	if planet.Name == "" {
+		return worldDatabase, fmt.Errorf("no planet found in the world database")
+	}
+	radius := math.RadiusFromVolume(1)
+	for i := 0; i < nbBonus; i++ {
+		randomIndex := rand.Intn(len(worldDatabase.PlayerParameter.ColorParameters))
+		worldDatabase.Elements = append(worldDatabase.Elements, &proto.Element{
+			Name:  fmt.Sprintf("element%d", i),
+			Color: worldDatabase.PlayerParameter.ColorParameters[randomIndex].Color,
+			Physic: &proto.Physic{
+				Radius:   radius,
+				Mass:     1,
+				Position: math.Times(math.RandomNormalizeVec3(), radius)},
+			TypeEnum: proto.TypeEnum_TYPE_UPGRADE})
+	}
+	return worldDatabase, nil
+}
+
 func main() {
 	flag.Parse()
 	fmt.Println("Starting server...")
@@ -50,6 +77,10 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed at service creation: %v", err)
 	}
-	proto.RegisterDarwinServiceServer(grpcServer, service.NewDarwinService(param))
+	world, err := PopulateWorldDatabase(param, 200)
+	if err != nil {
+		log.Fatalf("Failed at populate: %v", err)
+	}
+	proto.RegisterDarwinServiceServer(grpcServer, service.NewDarwinService(world))
 	grpcServer.Serve(lis)
 }

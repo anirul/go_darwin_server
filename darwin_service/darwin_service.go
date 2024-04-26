@@ -231,10 +231,11 @@ func (s *DarwinService) Update(
 	req *proto.UpdateRequest, stream proto.DarwinService_UpdateServer) error {
 	for {
 		time.Sleep(time.Millisecond * 100)
-		fmt.Printf("\r[%.3f] Processing...", math.TimeSecondNow())
+		fmt.Printf("[%.3f] Processing...\n", math.TimeSecondNow())
 		s.mu.Lock()
 		s.removeDisconnected()
 		s.checkHit()
+		fmt.Printf("[%d] Elements.\n", len(s.world.Elements))
 		err := stream.Send(&proto.UpdateResponse{
 			Characters: s.world.Characters,
 			Elements:   s.world.Elements,
