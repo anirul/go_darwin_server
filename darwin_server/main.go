@@ -50,6 +50,7 @@ func PopulateWorldDatabase(worldDatabase *proto.WorldDatabase, nbBonus int) (*pr
 		return worldDatabase, fmt.Errorf("no planet found in the world database")
 	}
 	radius := math.RadiusFromVolume(1)
+	radiusFromEarth := radius + planet.Physic.Radius
 	for i := 0; i < nbBonus; i++ {
 		randomIndex := rand.Intn(len(worldDatabase.PlayerParameter.ColorParameters))
 		worldDatabase.Elements = append(worldDatabase.Elements, &proto.Element{
@@ -58,7 +59,7 @@ func PopulateWorldDatabase(worldDatabase *proto.WorldDatabase, nbBonus int) (*pr
 			Physic: &proto.Physic{
 				Radius:   radius,
 				Mass:     1,
-				Position: math.Times(math.RandomNormalizeVec3(), radius)},
+				Position: math.Times(math.RandomNormalizeVec3(), radiusFromEarth)},
 			TypeEnum: proto.TypeEnum_TYPE_UPGRADE})
 	}
 	return worldDatabase, nil
